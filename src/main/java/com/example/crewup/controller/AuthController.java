@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.crewup.dto.ApiResponse;
 import com.example.crewup.dto.request.auth.SigninRequest;
 import com.example.crewup.dto.request.auth.SignupRequest;
-import com.example.crewup.dto.response.JwtResponse;
+import com.example.crewup.dto.response.auth.JwtResponse;
 import com.example.crewup.entity.member.Member;
 import com.example.crewup.service.AuthService;
 
@@ -23,17 +24,17 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<Boolean> signUp(@RequestBody SignupRequest signupRequest) {
-		return ResponseEntity.ok(authService.signUp(signupRequest));
+	public ResponseEntity<ApiResponse<Boolean>> signUp(@RequestBody SignupRequest signupRequest) {
+		return ResponseEntity.ok(ApiResponse.success(authService.signUp(signupRequest)));
 	}
 
 	@PostMapping("/sign-in")
-	public ResponseEntity<JwtResponse> signIn(@RequestBody SigninRequest signinRequest) {
-		return ResponseEntity.ok(authService.signIn(signinRequest));
+	public ResponseEntity<ApiResponse<JwtResponse>> signIn(@RequestBody SigninRequest signinRequest) {
+		return ResponseEntity.ok(ApiResponse.success(authService.signIn(signinRequest)));
 	}
 
 	@PostMapping("/reissue")
-	public ResponseEntity<JwtResponse> reissue(@AuthenticationPrincipal Member member){
-		return ResponseEntity.ok(authService.reissue(member));
+	public ResponseEntity<ApiResponse<JwtResponse>> reissue(@AuthenticationPrincipal Member member){
+		return ResponseEntity.ok(ApiResponse.success(authService.reissue(member)));
 	}
 }

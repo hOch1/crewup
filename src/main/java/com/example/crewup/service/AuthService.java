@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.crewup.config.security.jwt.JwtProvider;
 import com.example.crewup.dto.request.auth.SigninRequest;
 import com.example.crewup.dto.request.auth.SignupRequest;
-import com.example.crewup.dto.response.JwtResponse;
+import com.example.crewup.dto.response.auth.JwtResponse;
 import com.example.crewup.entity.member.Member;
+import com.example.crewup.exception.CustomException;
+import com.example.crewup.exception.ErrorCode;
 import com.example.crewup.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -24,8 +26,12 @@ public class AuthService {
 
 	@Transactional
 	public Boolean signUp(SignupRequest signupRequest) {
-		memberRepository.save(Member.of(signupRequest, passwordEncoder));
+		if (memberRepository.existsByEmail(signupRequest.email()))
+			throw new CustomException(ErrorCode.ALREADY_EXISTS_EMAIL);
+		if (memberRepository.existsByNickname(signupRequest.nickname()))
+			throw new CustomException(ErrorCode.ALREADY_EXISTS_NICKNAME);
 
+		memberRepository.save(Member.of(signupRequest, passwordEncoder));
 		return true;
 	}
 
@@ -35,7 +41,6 @@ public class AuthService {
 
 		if (!passwordEncoder.matches(signinRequest.password(), member.getPassword()))
 			throw new IllegalArgumentException("잘못된 비밀번호입니다.");
-
 
 		return jwtProvider.createToken(member);
 	}

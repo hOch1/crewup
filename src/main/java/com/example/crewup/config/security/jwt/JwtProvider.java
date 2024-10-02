@@ -6,7 +6,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.example.crewup.dto.response.JwtResponse;
+import com.example.crewup.dto.response.auth.JwtResponse;
 import com.example.crewup.entity.member.Member;
 
 import io.jsonwebtoken.Claims;
