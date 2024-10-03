@@ -1,6 +1,7 @@
 package com.example.crewup.config.oauth2;
 
 import com.example.crewup.entity.member.Member;
+import com.example.crewup.entity.member.Role;
 import lombok.Builder;
 
 import java.util.Map;
@@ -17,6 +18,7 @@ public record OAuth2UserInfo (
             case "google" -> ofGoogle(attributes);
             case "naver" -> ofNaver(attributes);
             case "kakao" -> ofKakao(attributes);
+            case "github" -> ofGithub(attributes);
             default -> throw new IllegalArgumentException("지원하지 않는 소셜 로그인입니다.");
         };
     }
@@ -24,6 +26,7 @@ public record OAuth2UserInfo (
     private static OAuth2UserInfo ofGoogle(Map<String, Object> attributes) {
         return OAuth2UserInfo.builder()
                 .name(attributes.get("name").toString())
+                .nickname(attributes.get("email").toString())
                 .email(attributes.get("email").toString())
                 .build();
     }
@@ -48,11 +51,21 @@ public record OAuth2UserInfo (
                 .build();
     }
 
-    public Member toEntity() {
+    private static OAuth2UserInfo ofGithub(Map<String, Object> attributes) {
+        return OAuth2UserInfo.builder()
+                .name(attributes.get("name").toString())
+                .email(attributes.get("email").toString())
+                .nickname(attributes.get("login").toString())
+                .build();
+    }
+
+    public Member toEntity(String provider) {
         return Member.builder()
                 .name(name)
                 .email(email)
                 .nickname(nickname)
+                .role(Role.ROLE_USER)
+                .provider(provider)
                 .build();
     }
 }

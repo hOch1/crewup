@@ -34,7 +34,7 @@ public class Member extends BaseTimeEntity {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -43,9 +43,6 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "provider")
     private String provider;
-
-    @Column(name = "provider_id")
-    private String providerId;
 
     public static Member of(SignupRequest signupRequest, PasswordEncoder passwordEncoder) {
         return Member.builder()

@@ -1,6 +1,7 @@
 package com.example.crewup.config.security;
 
 import com.example.crewup.config.oauth2.CustomOAuth2UserService;
+import com.example.crewup.config.oauth2.OAuth2SuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,6 +27,7 @@ public class SecurityConfig {
 
     private final JwtProvider jwtProvider;
     private final CustomOAuth2UserService oAuth2UserService;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,6 +39,7 @@ public class SecurityConfig {
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
+                        .successHandler(oAuth2SuccessHandler)
                 )
                 .authorizeHttpRequests(a -> a
                     .requestMatchers(HttpMethod.POST, "/api/auth/sign-up", "/api/auth/sign-in").permitAll()

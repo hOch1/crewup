@@ -27,14 +27,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, attributes);
 
-        Member member = getOrSave(oAuth2UserInfo);
+        Member member = getOrSave(oAuth2UserInfo, registrationId);
 
         return new PrincipalDetails(member, attributes);
     }
 
-    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo) {
+    private Member getOrSave(OAuth2UserInfo oAuth2UserInfo, String provider) {
         Member member = memberRepository.findByEmail(oAuth2UserInfo.email())
-                .orElseGet(oAuth2UserInfo::toEntity);
+                .orElseGet(() -> oAuth2UserInfo.toEntity(provider));
 
         return memberRepository.save(member);
     }
