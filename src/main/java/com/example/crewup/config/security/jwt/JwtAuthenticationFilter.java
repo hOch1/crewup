@@ -2,14 +2,13 @@ package com.example.crewup.config.security.jwt;
 
 import java.io.IOException;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import com.example.crewup.exception.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.example.crewup.config.security.CustomUserDetailsService;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,7 +20,6 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtProvider jwtProvider;
-	private final CustomUserDetailsService customUserDetailsService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -31,11 +29,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			String token = resolveToken(request);
 
 			if (StringUtils.hasText(token) && jwtProvider.validateToken(token)){
-				UserDetails userDetails = customUserDetailsService.loadUserByUsername(jwtProvider.getSubject(token));
-				Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+				Authentication authentication = jwtProvider.getAuthentication(token);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
-		} catch (Exception e){
+		} catch (ExpiredJwtException e){
 			SecurityContextHolder.getContext().setAuthentication(null);
 		} finally {
 			filterChain.doFilter(request, response);
@@ -49,4 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		return null;
 	}
+
+
 }

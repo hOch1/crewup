@@ -3,7 +3,12 @@ package com.example.crewup.config.security.jwt;
 import java.util.Base64;
 import java.util.Date;
 
+import com.example.crewup.config.security.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.example.crewup.dto.response.auth.JwtResponse;
@@ -14,6 +19,7 @@ import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
 
 @Component
+@RequiredArgsConstructor
 public class JwtProvider {
 
 	@Value("${jwt.secret}")
@@ -24,6 +30,8 @@ public class JwtProvider {
 
 	@Value("${jwt.refresh.expiration}")
 	private long refreshTokenExpiration;
+
+	private final CustomUserDetailsService userDetailsService;
 
 	@PostConstruct
 	protected void init() {
@@ -59,6 +67,12 @@ public class JwtProvider {
 			.build();
 	}
 
+	public Authentication getAuthentication(String token) {
+		String email = getSubject(token);
+		UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+	}
+
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parserBuilder()
@@ -67,9 +81,8 @@ public class JwtProvider {
 				.parseClaimsJws(token);
 			return true;
 		} catch (Exception e) {
-			System.out.println("Invalid JWT token: " + e.getMessage());
+			return false;
 		}
-		return false;
 	}
 
 	public String getSubject(String token) {
