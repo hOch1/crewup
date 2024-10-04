@@ -37,10 +37,10 @@ public class AuthService {
 
 	public JwtResponse signIn(SigninRequest signinRequest) {
 		Member member = memberRepository.findByEmail(signinRequest.email())
-			.orElseThrow(() -> new IllegalArgumentException("가입되지 않은 회원 입니다."));
+			.orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
 		if (!passwordEncoder.matches(signinRequest.password(), member.getPassword()))
-			throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+			throw new CustomException(ErrorCode.PASSWORD_NOT_MATCHED);
 
 		return jwtProvider.createToken(member);
 	}
