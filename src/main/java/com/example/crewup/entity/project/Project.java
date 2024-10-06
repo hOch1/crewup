@@ -1,5 +1,6 @@
 package com.example.crewup.entity.project;
 
+import com.example.crewup.dto.request.project.CreateProjectRequest;
 import com.example.crewup.entity.BaseTimeEntity;
 import com.example.crewup.entity.member.Member;
 import jakarta.persistence.*;
@@ -49,4 +50,18 @@ public class Project extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leader_id")
     private Member leader;
+
+    @Column(name = "is_deleted", columnDefinition = "boolean default false")
+    private boolean isDeleted;
+
+    public static Project of(CreateProjectRequest createProjectRequest, Member member){
+        return Project.builder()
+                .title(createProjectRequest.title())
+                .description(createProjectRequest.description())
+                .needPosition(createProjectRequest.needPosition())
+                .category(createProjectRequest.category())
+                .status(Status.RECRUITING)
+                .leader(member)
+                .build();
+    }
 }

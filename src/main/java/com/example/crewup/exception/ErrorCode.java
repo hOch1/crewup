@@ -6,6 +6,9 @@ import lombok.Getter;
 public enum ErrorCode {
 
 	MEMBER_NOT_FOUND("해당 회원을 찾을 수 없습니다.", 404),
+	PROJECT_NOT_FOUND("해당 프로젝트를 찾을 수 없습니다.", 404),
+
+	PROJECT_IS_DELETED("삭제된 프로젝트 입니다.", 410),
 
 	ALREADY_EXISTS_EMAIL("이미 가입된 이메일입니다.", 400),
 	ALREADY_EXISTS_NICKNAME("이미 사용중인 닉네임 입니다.", 400),
@@ -16,7 +19,7 @@ public enum ErrorCode {
 	MALFORMED_TOKEN("잘못된 형식의 토큰입니다.", 401),
 	UNSUPPORTED_TOKEN("지원하지 않는 토큰입니다.", 401),
 
-	ACCESS_DENIED("접근 권한이 없습니다.", 403)
+	ACCESS_DENIED("접근 권한이 없습니다.", 403),
 	;
 
 	private final String message;

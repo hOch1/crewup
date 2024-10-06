@@ -14,6 +14,7 @@ import com.example.crewup.dto.response.auth.JwtResponse;
 import com.example.crewup.entity.member.Member;
 import com.example.crewup.service.AuthService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,17 +25,23 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<ApiResponse<Boolean>> signUp(@RequestBody SignupRequest signupRequest) {
+	public ResponseEntity<ApiResponse<Boolean>> signUp(
+		@RequestBody @Valid SignupRequest signupRequest) {
+
 		return ResponseEntity.ok(ApiResponse.success(authService.signUp(signupRequest)));
 	}
 
 	@PostMapping("/sign-in")
-	public ResponseEntity<ApiResponse<JwtResponse>> signIn(@RequestBody SigninRequest signinRequest) {
+	public ResponseEntity<ApiResponse<JwtResponse>> signIn(
+		@RequestBody @Valid SigninRequest signinRequest) {
+
 		return ResponseEntity.ok(ApiResponse.success(authService.signIn(signinRequest)));
 	}
 
 	@PostMapping("/reissue")
-	public ResponseEntity<ApiResponse<JwtResponse>> reissue(@AuthenticationPrincipal Member member){
+	public ResponseEntity<ApiResponse<JwtResponse>> reissue(
+		@AuthenticationPrincipal Member member){
+
 		return ResponseEntity.ok(ApiResponse.success(authService.reissue(member)));
 	}
 }
