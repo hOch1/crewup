@@ -2,7 +2,6 @@ package com.example.crewup.config.security.jwt;
 
 import java.io.IOException;
 
-import com.example.crewup.exception.CustomException;
 import com.example.crewup.exception.ErrorCode;
 
 import io.jsonwebtoken.ExpiredJwtException;

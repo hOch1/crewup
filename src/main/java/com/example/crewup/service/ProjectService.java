@@ -71,6 +71,19 @@ public class ProjectService {
 	}
 
 	@Transactional
+	public boolean completeProject(Long projectId, Member member) {
+		Project project = projectRepository.findById(projectId)
+			.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+		if (!project.getLeader().equals(member))
+			throw new CustomException(ErrorCode.ACCESS_DENIED);
+
+		projectRepository.save(project.complete());
+
+		return true;
+	}
+
+	@Transactional
 	public boolean deleteProject(Long projectId, Member member) {
 		Project project = projectRepository.findById(projectId)
 			.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));

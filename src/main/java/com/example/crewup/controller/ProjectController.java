@@ -93,7 +93,11 @@ public class ProjectController {
 	}
 
 	@PatchMapping("/project/{projectId}")
-	public ResponseEntity<CustomApiResponse<?>> updateProject(
+	@Operation(summary = "프로젝트 수정", description = "프로젝트를 수정합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "프로젝트 수정 성공")
+	})
+	public ResponseEntity<CustomApiResponse<Boolean>> updateProject(
 		@PathVariable Long projectId,
 		@RequestBody UpdateProjectRequest updateProjectRequest,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
@@ -103,8 +107,25 @@ public class ProjectController {
 			.success(projectService.updateProject(projectId, updateProjectRequest, principalDetails.member())));
 	}
 
+	@PatchMapping("/project/{projectId}/complete")
+	@Operation(summary = "프로젝트 완료", description = "프로젝트를 완료합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "프로젝트 완료 성공")
+	})
+	public ResponseEntity<CustomApiResponse<Boolean>> completeProject(
+		@PathVariable Long projectId,
+		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.completeProject(projectId, principalDetails.member())));
+	}
+
 	@DeleteMapping("/project/{projectId}")
-	public ResponseEntity<CustomApiResponse<?>> deleteProject(
+	@Operation(summary = "프로젝트 삭제", description = "프로젝트를 삭제합니다.")
+	@ApiResponses(value = {
+		@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공")
+	})
+	public ResponseEntity<CustomApiResponse<Boolean>> deleteProject(
 		@PathVariable Long projectId,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 

@@ -72,13 +72,18 @@ public class Project extends BaseTimeEntity {
             .description(updateRequest.description() != null ? updateRequest.description() : this.description)
             .needPosition(updateRequest.needPosition() != null ? updateRequest.needPosition() : this.needPosition)
             .category(updateRequest.category() != null ? updateRequest.category() : this.category)
-            .status(updateRequest.status() != null ? updateRequest.status() : this.status)
             .build();
     }
 
     public Project delete() {
         return this.toBuilder()
             .isDeleted(true)
+            .build();
+    }
+
+    public Project complete() {
+        return this.toBuilder()
+            .status(Status.COMPLETE)
             .build();
     }
 }
