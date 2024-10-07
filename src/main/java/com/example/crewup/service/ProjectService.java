@@ -1,6 +1,7 @@
 package com.example.crewup.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.crewup.dto.request.project.CreateProjectRequest;
 import com.example.crewup.dto.request.project.Filter;
+import com.example.crewup.dto.request.project.UpdateProjectRequest;
 import com.example.crewup.dto.response.project.ProjectResponse;
 import com.example.crewup.entity.member.Member;
 import com.example.crewup.entity.project.Project;
@@ -55,5 +57,31 @@ public class ProjectService {
 		Page<Project> projects = projectRepository.findByProjectByFilter(filter, pageable);
 
 		return projects.map(ProjectResponse::of);
+	}
+
+	@Transactional
+	public boolean updateProject(Long projectId, UpdateProjectRequest updateProjectRequest, Member member) {
+		Project project = projectRepository.findById(projectId)
+			.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+		if (!project.getLeader().equals(member))
+			throw new CustomException(ErrorCode.ACCESS_DENIED);
+
+		projectRepository.save(project.update(updateProjectRequest));
+
+		return true;
+	}
+
+	@Transactional
+	public boolean deleteProject(Long projectId, Member member) {
+		Project project = projectRepository.findById(projectId)
+			.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+		if (!project.getLeader().equals(member))
+			throw new CustomException(ErrorCode.ACCESS_DENIED);
+
+		projectRepository.save(project.delete());
+
+		return true;
 	}
 }

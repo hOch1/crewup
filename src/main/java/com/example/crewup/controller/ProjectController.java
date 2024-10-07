@@ -7,7 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,7 @@ import com.example.crewup.config.security.PrincipalDetails;
 import com.example.crewup.dto.CustomApiResponse;
 import com.example.crewup.dto.request.project.CreateProjectRequest;
 import com.example.crewup.dto.request.project.Filter;
+import com.example.crewup.dto.request.project.UpdateProjectRequest;
 import com.example.crewup.dto.response.project.ProjectResponse;
 import com.example.crewup.service.ProjectService;
 
@@ -89,5 +92,25 @@ public class ProjectController {
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
 		return ResponseEntity.ok(CustomApiResponse.success(projectService.getMyProjects(principalDetails.member())));
+	}
+
+	@PatchMapping("/project/{projectId}")
+	public ResponseEntity<CustomApiResponse<?>> updateProject(
+		@PathVariable Long projectId,
+		@RequestBody UpdateProjectRequest updateProjectRequest,
+		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.updateProject(projectId, updateProjectRequest, principalDetails.member())));
+	}
+
+	@DeleteMapping("/project/{projectId}")
+	public ResponseEntity<CustomApiResponse<?>> deleteProject(
+		@PathVariable Long projectId,
+		@AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.deleteProject(projectId, principalDetails.member())));
 	}
 }

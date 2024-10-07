@@ -1,6 +1,7 @@
 package com.example.crewup.entity.project;
 
 import com.example.crewup.dto.request.project.CreateProjectRequest;
+import com.example.crewup.dto.request.project.UpdateProjectRequest;
 import com.example.crewup.entity.BaseTimeEntity;
 import com.example.crewup.entity.member.Member;
 import jakarta.persistence.*;
@@ -11,7 +12,7 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+@Builder(toBuilder = true)
 @Getter
 public class Project extends BaseTimeEntity {
 
@@ -63,5 +64,21 @@ public class Project extends BaseTimeEntity {
                 .status(Status.RECRUITING)
                 .leader(member)
                 .build();
+    }
+
+    public Project update(UpdateProjectRequest updateRequest) {
+        return this.toBuilder()
+            .title(updateRequest.title() != null ? updateRequest.title() : this.title)
+            .description(updateRequest.description() != null ? updateRequest.description() : this.description)
+            .needPosition(updateRequest.needPosition() != null ? updateRequest.needPosition() : this.needPosition)
+            .category(updateRequest.category() != null ? updateRequest.category() : this.category)
+            .status(updateRequest.status() != null ? updateRequest.status() : this.status)
+            .build();
+    }
+
+    public Project delete() {
+        return this.toBuilder()
+            .isDeleted(true)
+            .build();
     }
 }
