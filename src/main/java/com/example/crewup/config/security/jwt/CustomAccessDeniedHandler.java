@@ -6,7 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 
-import com.example.crewup.dto.ApiResponse;
+import com.example.crewup.dto.CustomApiResponse;
 import com.example.crewup.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,7 +27,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(ErrorCode.ACCESS_DENIED.getStatus());
 
-		ApiResponse<String> apiResponse = ApiResponse.fail(ErrorCode.ACCESS_DENIED.getMessage());
-		response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+		CustomApiResponse<String> customApiResponse = CustomApiResponse.fail(ErrorCode.ACCESS_DENIED.getMessage());
+		response.getWriter().write(objectMapper.writeValueAsString(customApiResponse));
 	}
 }

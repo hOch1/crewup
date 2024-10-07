@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,8 +51,8 @@ public class ProjectService {
 			.toList();
 	}
 
-	public Page<ProjectResponse> getProjectsByFilter(Filter filter) {
-		Page<Project> projects = projectRepository.findByProjectList(filter, PageRequest.of(0, 10));
+	public Page<ProjectResponse> getProjectsByFilter(Filter filter, Pageable pageable) {
+		Page<Project> projects = projectRepository.findByProjectByFilter(filter, pageable);
 
 		return projects.map(ProjectResponse::of);
 	}

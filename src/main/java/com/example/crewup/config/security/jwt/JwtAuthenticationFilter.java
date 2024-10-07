@@ -1,9 +1,8 @@
 package com.example.crewup.config.security.jwt;
 
 import java.io.IOException;
-import java.security.SignatureException;
 
-import com.example.crewup.dto.ApiResponse;
+import com.example.crewup.dto.CustomApiResponse;
 import com.example.crewup.exception.ErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -69,8 +68,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(errorCode.getStatus());
 
-		ApiResponse<String> apiResponse = ApiResponse.fail(errorCode.getMessage());
-		response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+		CustomApiResponse<String> customApiResponse = CustomApiResponse.fail(errorCode.getMessage());
+		response.getWriter().write(objectMapper.writeValueAsString(customApiResponse));
 	}
 
 

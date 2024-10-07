@@ -27,7 +27,8 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom {
 
 		List<Project> projects = queryFactory
 			.selectFrom(project)
-			.where(project.isDeleted.eq(false)
+			.where(
+				project.isDeleted.eq(false)
 				.and(getFilterExpression(filter, project))
 			)
 			.offset(pageable.getOffset())

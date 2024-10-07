@@ -50,7 +50,7 @@ public class SecurityConfig {
                         .successHandler(oAuth2SuccessHandler)
                 )
                 .authorizeHttpRequests(a -> a
-                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/auth/sign-up", "/api/auth/sign-in").permitAll()
                     .requestMatchers("/api/**").authenticated()
                     .anyRequest().permitAll()
                 )
