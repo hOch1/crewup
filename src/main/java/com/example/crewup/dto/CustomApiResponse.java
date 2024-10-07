@@ -14,17 +14,14 @@ public record CustomApiResponse<T> (
 	T data,
 
 	@Schema(description = "응답 메시지 (실패 했을경우)", nullable = true)
-	String message,
-
-	@Schema(description = "응답 시간")
-	LocalDateTime timestamp
+	String message
 
 ) {
 	public static <T> CustomApiResponse<T> success(T data) {
-		return new CustomApiResponse<>(data, null, LocalDateTime.now());
+		return new CustomApiResponse<>(data, null);
 	}
 
 	public static <T> CustomApiResponse<T> fail(String message) {
-		return new CustomApiResponse<>(null, message, LocalDateTime.now());
+		return new CustomApiResponse<>(null, message);
 	}
 }

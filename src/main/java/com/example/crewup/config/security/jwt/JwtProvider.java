@@ -3,7 +3,11 @@ package com.example.crewup.config.security.jwt;
 import java.util.Base64;
 import java.util.Date;
 
+import javax.crypto.SecretKey;
+
 import com.example.crewup.config.security.CustomUserDetailsService;
+
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,10 +36,12 @@ public class JwtProvider {
 	private long refreshTokenExpiration;
 
 	private final CustomUserDetailsService userDetailsService;
+	private SecretKey signingKey;
 
 	@PostConstruct
 	protected void init() {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+		signingKey = Keys.hmacShaKeyFor(secretKey.getBytes());
 	}
 
 	public JwtResponse createToken(Member member) {
@@ -76,7 +82,7 @@ public class JwtProvider {
 	public boolean validateToken(String token) {
 		try {
 			Jwts.parserBuilder()
-				.setSigningKey(secretKey)
+				.setSigningKey(signingKey)
 				.build()
 				.parseClaimsJws(token);
 			return true;
@@ -87,7 +93,7 @@ public class JwtProvider {
 
 	public String getSubject(String token) {
 		return Jwts.parserBuilder()
-			.setSigningKey(secretKey)
+			.setSigningKey(signingKey)
 			.build()
 			.parseClaimsJws(token)
 			.getBody()
