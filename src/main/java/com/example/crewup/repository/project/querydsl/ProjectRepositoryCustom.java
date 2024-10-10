@@ -1,4 +1,4 @@
-package com.example.crewup.repository.querydsl;
+package com.example.crewup.repository.project.querydsl;
 
 import java.util.List;
 

@@ -13,8 +13,8 @@ import com.example.crewup.entity.project.Project;
 import com.example.crewup.entity.project.ProjectMember;
 import com.example.crewup.exception.CustomException;
 import com.example.crewup.exception.ErrorCode;
-import com.example.crewup.repository.ProjectMemberRepository;
-import com.example.crewup.repository.ProjectRepository;
+import com.example.crewup.repository.project.ProjectMemberRepository;
+import com.example.crewup.repository.project.ProjectRepository;
 
 import lombok.RequiredArgsConstructor;
 

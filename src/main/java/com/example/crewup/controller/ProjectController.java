@@ -83,8 +83,7 @@ public class ProjectController {
 	@GetMapping("/projects/my")
 	@Operation(summary = "내 프로젝트 목록 조회", description = "내 프로젝트 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "내 프로젝트 목록 조회 성공", content = @Content(
-			schema = @Schema(implementation = CustomApiResponse.class, oneOf = ProjectResponse.class)))
+		@ApiResponse(responseCode = "200", description = "내 프로젝트 목록 조회 성공")
 	})
 	public ResponseEntity<CustomApiResponse<List<ProjectResponse>>> getMyProjects(
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {

@@ -67,7 +67,7 @@ public class Project extends BaseTimeEntity {
 
     /**
      * 리더 설정
-     * @param member leader로 설정하ㄹ member
+     * @param member    leader 설정할 member
      */
     public void setLeader(Member member) {
         ProjectMember projectMember = ProjectMember.builder()
@@ -81,8 +81,8 @@ public class Project extends BaseTimeEntity {
 
     /**
      * 리더 여부 확인
-     * @param member leader 여부를 확인할 member
-     * @return boolean member가 리더일때 true
+     * @param member    leader 여부를 확인할 member
+     * @return boolean  member가 리더일때 true
      */
     public boolean isLeader(Member member) {
         return projectMembers.stream()

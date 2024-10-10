@@ -1,8 +1,5 @@
 package com.example.crewup.entity.member;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import com.example.crewup.dto.request.auth.SignupRequest;
 import com.example.crewup.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,14 +38,6 @@ public class Member extends BaseTimeEntity {
     @Column(name = "is_deleted", columnDefinition = "boolean default false")
     private boolean isDeleted;
 
-    public static Member of(SignupRequest signupRequest, PasswordEncoder passwordEncoder) {
-        return Member.builder()
-            .email(signupRequest.email())
-            .name(signupRequest.name())
-            .nickname(signupRequest.nickname())
-            .password(passwordEncoder.encode(signupRequest.password()))
-            .role(Role.ROLE_USER)
-            .build();
-    }
-
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Profile profile;
 }

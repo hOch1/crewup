@@ -32,10 +32,18 @@ public class ProjectMember extends BaseTimeEntity {
     @Column(name = "is_leader", columnDefinition = "boolean default false")
     private boolean isLeader;
 
+    /**
+     * 포지션 변경
+     * @param request   변경할 포지션
+     */
     public void update(UpdateProjectMemberRequest request) {
         this.position = request.position();
     }
 
+    /**
+     * 프로젝트 리더 변경
+     * @param newLeader 새로운 리더
+     */
     public void updateLeader(ProjectMember newLeader) {
         this.isLeader = false;
         newLeader.isLeader = true;

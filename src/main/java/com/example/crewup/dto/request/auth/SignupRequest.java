@@ -1,5 +1,10 @@
 package com.example.crewup.dto.request.auth;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import com.example.crewup.entity.member.Member;
+import com.example.crewup.entity.member.Role;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
@@ -18,5 +23,13 @@ public record SignupRequest(
 	@NotBlank(message = "비밀번호를 입력해주세요.")
 	String password
 ) {
-
+	public Member toEntity(PasswordEncoder passwordEncoder){
+		return Member.builder()
+			.email(email())
+			.name(name())
+			.nickname(nickname())
+			.password(passwordEncoder.encode(password()))
+			.role(Role.ROLE_USER)
+			.build();
+	}
 }
