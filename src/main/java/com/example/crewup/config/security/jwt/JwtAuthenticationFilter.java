@@ -1,11 +1,8 @@
 package com.example.crewup.config.security.jwt;
 
 import java.io.IOException;
-import java.security.SignatureException;
 
-import com.example.crewup.dto.ApiResponse;
 import com.example.crewup.exception.ErrorCode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.core.Authentication;
@@ -26,7 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private final JwtProvider jwtProvider;
-	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -40,20 +36,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (ExpiredJwtException e) {
-			setErrorResponse(response, ErrorCode.EXPIRED_TOKEN);
-			return;
+			request.setAttribute("exception", ErrorCode.EXPIRED_TOKEN);
 		} catch (MalformedJwtException e) {
-			setErrorResponse(response, ErrorCode.MALFORMED_TOKEN);
-			return;
+			request.setAttribute("exception", ErrorCode.MALFORMED_TOKEN);
 		} catch (UnsupportedJwtException e) {
-			setErrorResponse(response, ErrorCode.UNSUPPORTED_TOKEN);
-			return;
+			request.setAttribute("exception", ErrorCode.UNSUPPORTED_TOKEN);
 		} catch (JwtException | IllegalArgumentException e) {
-			setErrorResponse(response, ErrorCode.INVALID_TOKEN);
-			return;
+			request.setAttribute("exception", ErrorCode.INVALID_TOKEN);
 		}
 		filterChain.doFilter(request, response);
-
 	}
 
 	private String resolveToken(HttpServletRequest request){
@@ -63,15 +54,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		return null;
 	}
-
-	private void setErrorResponse(HttpServletResponse response, ErrorCode errorCode) throws IOException {
-		response.setContentType("application/json");
-		response.setCharacterEncoding("utf-8");
-		response.setStatus(errorCode.getStatus());
-
-		ApiResponse<String> apiResponse = ApiResponse.fail(errorCode.getMessage());
-		response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
-	}
-
-
 }

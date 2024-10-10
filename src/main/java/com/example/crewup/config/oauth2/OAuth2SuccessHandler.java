@@ -2,7 +2,7 @@ package com.example.crewup.config.oauth2;
 
 import com.example.crewup.config.security.PrincipalDetails;
 import com.example.crewup.config.security.jwt.JwtProvider;
-import com.example.crewup.dto.ApiResponse;
+import com.example.crewup.dto.CustomApiResponse;
 import com.example.crewup.dto.response.auth.JwtResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -31,7 +31,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         response.setCharacterEncoding("utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
 
-        ApiResponse<JwtResponse> apiResponse = ApiResponse.success(jwtResponse);
-        response.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+        CustomApiResponse<JwtResponse> customApiResponse = CustomApiResponse.success(jwtResponse);
+        response.getWriter().write(objectMapper.writeValueAsString(customApiResponse));
     }
 }

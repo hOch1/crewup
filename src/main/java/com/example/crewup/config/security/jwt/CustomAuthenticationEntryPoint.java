@@ -2,8 +2,8 @@ package com.example.crewup.config.security.jwt;
 
 import java.io.IOException;
 
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import com.example.crewup.dto.CustomApiResponse;
@@ -15,19 +15,23 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
-public class CustomAccessDeniedHandler implements AccessDeniedHandler {
+public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
-
 	@Override
-	public void handle(HttpServletRequest request, HttpServletResponse response,
-		AccessDeniedException accessDeniedException) throws IOException, ServletException {
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+		AuthenticationException authException) throws IOException, ServletException {
+
+		ErrorCode code = (ErrorCode) request.getAttribute("exception");
+
+		if (code == null)
+			code = ErrorCode.ACCESS_DENIED;
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("utf-8");
-		response.setStatus(ErrorCode.ACCESS_DENIED.getStatus());
+		response.setStatus(code.getStatus());
 
-		CustomApiResponse<String> customApiResponse = CustomApiResponse.fail(ErrorCode.ACCESS_DENIED.getMessage());
+		CustomApiResponse<String> customApiResponse = CustomApiResponse.fail(code.getMessage());
 		response.getWriter().write(objectMapper.writeValueAsString(customApiResponse));
 	}
 }

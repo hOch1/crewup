@@ -5,9 +5,10 @@ import java.util.List;
 
 import com.example.crewup.config.oauth2.CustomOAuth2UserService;
 import com.example.crewup.config.oauth2.OAuth2SuccessHandler;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -22,6 +23,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.example.crewup.config.security.jwt.CustomAccessDeniedHandler;
+import com.example.crewup.config.security.jwt.CustomAuthenticationEntryPoint;
 import com.example.crewup.config.security.jwt.JwtAuthenticationFilter;
 import com.example.crewup.config.security.jwt.JwtProvider;
 
@@ -36,6 +38,7 @@ public class SecurityConfig {
     private final CustomOAuth2UserService oAuth2UserService;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
     private final CustomAccessDeniedHandler accessDeniedHandler;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -50,12 +53,15 @@ public class SecurityConfig {
                         .successHandler(oAuth2SuccessHandler)
                 )
                 .authorizeHttpRequests(a -> a
-                    .requestMatchers("/api/auth/**").permitAll()
+                    .requestMatchers("/api/auth/sign-up", "/api/auth/sign-in").permitAll()
                     .requestMatchers("/api/**").authenticated()
                     .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling(e -> e.accessDeniedHandler(accessDeniedHandler))
+                .exceptionHandling(e -> e
+                    .accessDeniedHandler(accessDeniedHandler)
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                )
                 .build();
     }
 

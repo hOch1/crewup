@@ -1,16 +1,18 @@
 package com.example.crewup.entity.project;
 
+import com.example.crewup.dto.request.project.UpdateProjectRequest;
 import com.example.crewup.entity.BaseTimeEntity;
 import com.example.crewup.entity.member.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+@Builder(toBuilder = true)
 @Getter
 public class Project extends BaseTimeEntity {
 
@@ -46,7 +48,62 @@ public class Project extends BaseTimeEntity {
     @Column(name = "status", nullable = false)
     private Status status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "leader_id")
-    private Member leader;
+    @Column(name = "is_deleted", columnDefinition = "boolean default false")
+    private boolean isDeleted;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<ProjectMember> projectMembers;
+
+    /**
+     * 프로젝트 멤버 추가
+     * @param projectMember 추가할 프로젝트 멤버
+     */
+    public void addProjectMember(ProjectMember projectMember) {
+        if (this.projectMembers == null)
+            this.projectMembers = new ArrayList<>();
+
+        this.projectMembers.add(projectMember);
+    }
+
+    /**
+     * 리더 설정
+     * @param member leader로 설정하ㄹ member
+     */
+    public void setLeader(Member member) {
+        ProjectMember projectMember = ProjectMember.builder()
+            .project(this)
+            .member(member)
+            .isLeader(true)
+            .build();
+
+        this.addProjectMember(projectMember);
+    }
+
+    /**
+     * 리더 여부 확인
+     * @param member leader 여부를 확인할 member
+     * @return boolean member가 리더일때 true
+     */
+    public boolean isLeader(Member member) {
+        return projectMembers.stream()
+            .anyMatch(pm -> pm.getMember().equals(member) && pm.isLeader());
+    }
+
+
+    public void update(UpdateProjectRequest updateRequest) {
+        this.toBuilder()
+            .title(updateRequest.title() != null ? updateRequest.title() : this.title)
+            .description(updateRequest.description() != null ? updateRequest.description() : this.description)
+            .needPosition(updateRequest.needPosition() != null ? updateRequest.needPosition() : this.needPosition)
+            .category(updateRequest.category() != null ? updateRequest.category() : this.category)
+            .build();
+    }
+
+    public void delete() {
+        this.isDeleted = true;
+    }
+
+    public void complete() {
+        this.status = Status.COMPLETE;
+    }
 }

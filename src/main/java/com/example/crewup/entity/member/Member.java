@@ -1,11 +1,5 @@
 package com.example.crewup.entity.member;
 
-import java.util.Collection;
-import java.util.Collections;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.crewup.dto.request.auth.SignupRequest;
@@ -43,6 +37,9 @@ public class Member extends BaseTimeEntity {
 
     @Column(name = "provider")
     private String provider;
+
+    @Column(name = "is_deleted", columnDefinition = "boolean default false")
+    private boolean isDeleted;
 
     public static Member of(SignupRequest signupRequest, PasswordEncoder passwordEncoder) {
         return Member.builder()
