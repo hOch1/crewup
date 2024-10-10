@@ -57,7 +57,7 @@ public class ProjectService {
 		if (!project.isLeader(member))
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 
-		projectRepository.save(project.update(updateProjectRequest));
+		project.update(updateProjectRequest);
 
 		return true;
 	}
@@ -70,7 +70,7 @@ public class ProjectService {
 		if (!project.isLeader(member))
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 
-		projectRepository.save(project.complete());
+		project.complete();
 
 		return true;
 	}
@@ -83,7 +83,7 @@ public class ProjectService {
 		if (!project.isLeader(member))
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 
-		projectRepository.save(project.delete());
+		project.delete();
 
 		return true;
 	}

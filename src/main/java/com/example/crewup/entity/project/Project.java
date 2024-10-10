@@ -90,8 +90,8 @@ public class Project extends BaseTimeEntity {
     }
 
 
-    public Project update(UpdateProjectRequest updateRequest) {
-        return this.toBuilder()
+    public void update(UpdateProjectRequest updateRequest) {
+        this.toBuilder()
             .title(updateRequest.title() != null ? updateRequest.title() : this.title)
             .description(updateRequest.description() != null ? updateRequest.description() : this.description)
             .needPosition(updateRequest.needPosition() != null ? updateRequest.needPosition() : this.needPosition)
@@ -99,15 +99,11 @@ public class Project extends BaseTimeEntity {
             .build();
     }
 
-    public Project delete() {
-        return this.toBuilder()
-            .isDeleted(true)
-            .build();
+    public void delete() {
+        this.isDeleted = true;
     }
 
-    public Project complete() {
-        return this.toBuilder()
-            .status(Status.COMPLETE)
-            .build();
+    public void complete() {
+        this.status = Status.COMPLETE;
     }
 }
