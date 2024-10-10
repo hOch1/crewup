@@ -20,20 +20,17 @@ public record ProjectResponse(
 	String description,
 	@Schema(description = "프로젝트 상태")
 	String status,
-	@Schema(description = "프로젝트 리더 ID")
-	Long leader_id,
 	@Schema(description = "프로젝트 카테고리")
 	List<Category> category,
 	@Schema(description = "필요한 포지션")
 	List<Position> needPosition
 ) {
-	public static ProjectResponse of(Project project) {
+	public static ProjectResponse from(Project project) {
 		return ProjectResponse.builder()
 				.id(project.getId())
 				.title(project.getTitle())
 				.description(project.getDescription())
 				.status(project.getStatus().name())
-				.leader_id(project.getLeader().getId())
 				.category(project.getCategory())
 				.needPosition(project.getNeedPosition())
 				.build();

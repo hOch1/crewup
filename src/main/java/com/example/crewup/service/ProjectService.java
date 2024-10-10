@@ -28,7 +28,7 @@ public class ProjectService {
 
 	@Transactional
 	public boolean createProject(CreateProjectRequest createProjectRequest, Member member) {
-		projectRepository.save(Project.of(createProjectRequest, member));
+		projectRepository.save(createProjectRequest.toEntity(member));
 
 		return true;
 	}
@@ -40,21 +40,13 @@ public class ProjectService {
 		if (project.isDeleted())
 			throw new CustomException(ErrorCode.PROJECT_IS_DELETED);
 
-		return ProjectResponse.of(project);
-	}
-
-	public List<ProjectResponse> getMyProjects(Member member) {
-		List<Project> projects = projectRepository.findByLeader(member);
-
-		return projects.stream()
-			.map(ProjectResponse::of)
-			.toList();
+		return ProjectResponse.from(project);
 	}
 
 	public Page<ProjectResponse> getProjectsByFilter(Filter filter, Pageable pageable) {
 		Page<Project> projects = projectRepository.findByProjectByFilter(filter, pageable);
 
-		return projects.map(ProjectResponse::of);
+		return projects.map(ProjectResponse::from);
 	}
 
 	@Transactional
@@ -62,7 +54,7 @@ public class ProjectService {
 		Project project = projectRepository.findById(projectId)
 			.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
-		if (!project.getLeader().equals(member))
+		if (!project.isLeader(member))
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 
 		projectRepository.save(project.update(updateProjectRequest));
@@ -75,7 +67,7 @@ public class ProjectService {
 		Project project = projectRepository.findById(projectId)
 			.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
-		if (!project.getLeader().equals(member))
+		if (!project.isLeader(member))
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 
 		projectRepository.save(project.complete());
@@ -88,11 +80,17 @@ public class ProjectService {
 		Project project = projectRepository.findById(projectId)
 			.orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
-		if (!project.getLeader().equals(member))
+		if (!project.isLeader(member))
 			throw new CustomException(ErrorCode.ACCESS_DENIED);
 
 		projectRepository.save(project.delete());
 
 		return true;
+	}
+
+	public List<ProjectResponse> getMyProjects(Member member) {
+		List<Project> projects = projectRepository.findByProjectByMy(member);
+
+		return projects.stream().map(ProjectResponse::from).toList();
 	}
 }

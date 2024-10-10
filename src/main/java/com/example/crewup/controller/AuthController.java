@@ -15,8 +15,6 @@ import com.example.crewup.entity.member.Member;
 import com.example.crewup.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,7 +30,7 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/sign-up")
-	@Operation(summary = "일반 회원가입", description = "일반 회원가입을 진행합니다.", security = {})
+	@Operation(summary = "일반 회원가입", description = "일반 회원가입을 진행합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "회원가입 성공"),
 		@ApiResponse(responseCode = "400", description = "이미 존재하는 이메일 입니다."),
@@ -45,7 +43,7 @@ public class AuthController {
 	}
 
 	@PostMapping("/sign-in")
-	@Operation(summary = "일반 로그인", description = "일반 로그인을 진행합니다.", security = {})
+	@Operation(summary = "일반 로그인", description = "일반 로그인을 진행합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "로그인 성공"),
 		@ApiResponse(responseCode = "404", description = "회원을 찾을 수 없습니다."),

@@ -7,8 +7,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import com.example.crewup.dto.request.project.Filter;
+import com.example.crewup.entity.member.Member;
 import com.example.crewup.entity.project.Project;
 import com.example.crewup.entity.project.QProject;
+import com.example.crewup.entity.project.QProjectMember;
 import com.example.crewup.entity.project.Status;
 import com.example.crewup.repository.querydsl.ProjectRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -37,6 +39,21 @@ public class ProjectRepositoryCustomImpl implements ProjectRepositoryCustom {
 			.fetch();
 
 		return new PageImpl<>(projects, pageable, projects.size());
+	}
+
+	@Override
+	public List<Project> findByProjectByMy(Member member) {
+		QProject project = QProject.project;
+		QProjectMember projectMember = QProjectMember.projectMember;
+
+		return queryFactory
+			.selectFrom(project)
+			.join(project.projectMembers, projectMember)
+			.where(
+				project.isDeleted.eq(false)
+				.and(projectMember.member.eq(member))
+			)
+			.fetch();
 	}
 
 	private BooleanExpression getFilterExpression(Filter filter, QProject project) {
