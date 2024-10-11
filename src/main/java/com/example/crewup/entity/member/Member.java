@@ -1,5 +1,6 @@
 package com.example.crewup.entity.member;
 
+import com.example.crewup.dto.request.auth.SignupRequest;
 import com.example.crewup.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,5 +40,11 @@ public class Member extends BaseTimeEntity {
     private boolean isDeleted;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Profile profile = new Profile();
+    private Profile profile;
+
+    //-- 연관관계 편의 메서드 --//
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+        profile.setMember(this);
+    }
 }

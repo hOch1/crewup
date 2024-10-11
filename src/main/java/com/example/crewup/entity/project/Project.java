@@ -86,23 +86,34 @@ public class Project extends BaseTimeEntity {
      */
     public boolean isLeader(Member member) {
         return projectMembers.stream()
-            .anyMatch(pm -> pm.getMember().equals(member) && pm.isLeader());
+            .anyMatch(pm -> pm.getMember().getId().equals(member.getId()) && pm.isLeader());
     }
 
-
-    public void update(UpdateProjectRequest updateRequest) {
-        this.toBuilder()
-            .title(updateRequest.title() != null ? updateRequest.title() : this.title)
-            .description(updateRequest.description() != null ? updateRequest.description() : this.description)
-            .needPosition(updateRequest.needPosition() != null ? updateRequest.needPosition() : this.needPosition)
-            .category(updateRequest.category() != null ? updateRequest.category() : this.category)
-            .build();
+    /**
+     * 프로젝트 수정
+     * @param request   프로젝트 수정 요청
+     */
+    public void update(UpdateProjectRequest request) {
+        if (request.title() != null)
+            this.title = request.title();
+        if (request.description() != null)
+            this.description = request.description();
+        if (request.needPosition() != null)
+            this.needPosition = request.needPosition();
+        if (request.category() != null)
+            this.category = request.category();
     }
 
+    /**
+     * 프로젝트 삭제 (soft delete)
+     */
     public void delete() {
         this.isDeleted = true;
     }
 
+    /**
+     * 프로젝트 완료 상태로 변경
+     */
     public void complete() {
         this.status = Status.COMPLETE;
     }

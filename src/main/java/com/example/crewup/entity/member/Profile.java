@@ -23,7 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Builder(toBuilder = true)
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -47,21 +47,48 @@ public class Profile extends BaseTimeEntity {
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProfileLink> profileLinks = new ArrayList<>();
 
-	public void addLink(ProfileLink profileLink) {
-		profileLinks.add(profileLink);
+	/**
+	 * 기본 프로필 생성
+	 * @return 기본 프로필
+	 */
+	public static Profile defaultProfile() {
+		return Profile.builder()
+			.bio("자기소개를 작성해주세요.")
+			.build();
 	}
 
+	/**
+	 * 프로필 링크 추가
+	 * @param profileLink 프로필 링크
+	 */
+	public void addLink(ProfileLink profileLink) {
+		this.profileLinks.add(profileLink);
+	}
+
+	/**
+	 * 프로필 링크 삭제
+	 * profile update시 사용
+	 */
 	public void clearLinks() {
 		this.profileLinks.forEach(ProfileLink::removeProfile);
 		this.profileLinks.clear();
 	}
 
-	public void update(UpdateProfileRequest updateProfileRequest) {
-		this.toBuilder()
-			.bio(updateProfileRequest.bio() != null ?
-				updateProfileRequest.bio() : this.bio)
-			.profileImage(updateProfileRequest.profileImage() != null ?
-				updateProfileRequest.profileImage() : this.profileImage)
-			.build();
+	/**
+	 * 프로필 수정
+	 * @param request 프로필 수정 요청
+	 */
+	public void update(UpdateProfileRequest request) {
+		if (request.bio() != null)
+			this.bio = request.bio();
+
+		if (request.profileImage() != null)
+			this.profileImage = request.profileImage();
+
+	}
+
+	//-- 연관관계 편의 메서드 --//
+	public void setMember(Member member) {
+		this.member = member;
 	}
 }

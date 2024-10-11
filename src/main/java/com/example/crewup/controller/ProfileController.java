@@ -3,6 +3,7 @@ package com.example.crewup.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class ProfileController {
 
 	private final ProfileService profileService;
 
-	@PostMapping("/profile")
+	@PatchMapping("/profile")
 	@Operation(summary = "프로필 수정", description = "프로필을 수정합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "프로필 수정 성공"),

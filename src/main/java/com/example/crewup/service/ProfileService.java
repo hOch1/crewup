@@ -28,6 +28,8 @@ public class ProfileService {
 		Profile profile = profileRepository.findByMemberId(member.getId())
 			.orElseThrow(() -> new CustomException(ErrorCode.PROFILE_NOT_FOUND));
 
+		profile.update(updateProfileRequest);
+
 		List<UpdateLinkRequest> linkRequests = updateProfileRequest.linkRequests();
 		if (linkRequests != null && !linkRequests.isEmpty()) {
 			profile.clearLinks();
@@ -36,7 +38,6 @@ public class ProfileService {
 				profile.addLink(linkRequest.toEntity(profile)));
 		}
 
-		profile.update(updateProfileRequest);
 		return true;
 	}
 

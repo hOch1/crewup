@@ -13,11 +13,11 @@ public record UpdateProfileRequest(
 	@Schema(description = "자기소개", nullable = true)
 	String bio,
 
-	@Schema(description = "링크 목록", nullable = true)
-	List<UpdateLinkRequest> linkRequests,
-
 	@Schema(description = "프로필 이미지", nullable = true)
-	String profileImage
+	String profileImage,
+
+	@Schema(description = "링크 목록", nullable = true)
+	List<UpdateLinkRequest> linkRequests
 ) {
 	public Profile toEntity(Member member) {
 		return Profile.builder()

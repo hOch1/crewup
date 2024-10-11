@@ -33,7 +33,7 @@ public class ProjectMember extends BaseTimeEntity {
     private boolean isLeader;
 
     /**
-     * 포지션 변경
+     * 포지션 변경 (추후 추가될수있음)
      * @param request   변경할 포지션
      */
     public void update(UpdateProjectMemberRequest request) {

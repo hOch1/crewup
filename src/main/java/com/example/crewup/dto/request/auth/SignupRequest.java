@@ -3,6 +3,7 @@ package com.example.crewup.dto.request.auth;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.crewup.entity.member.Member;
+import com.example.crewup.entity.member.Profile;
 import com.example.crewup.entity.member.Role;
 
 import jakarta.validation.constraints.Email;
@@ -24,12 +25,15 @@ public record SignupRequest(
 	String password
 ) {
 	public Member toEntity(PasswordEncoder passwordEncoder){
-		return Member.builder()
+		Member member = Member.builder()
 			.email(email())
 			.name(name())
 			.nickname(nickname())
 			.password(passwordEncoder.encode(password()))
 			.role(Role.ROLE_USER)
 			.build();
+
+		member.setProfile(Profile.defaultProfile());
+		return member;
 	}
 }
