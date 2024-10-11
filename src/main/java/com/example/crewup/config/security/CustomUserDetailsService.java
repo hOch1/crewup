@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.crewup.entity.member.Member;
-import com.example.crewup.repository.MemberRepository;
+import com.example.crewup.repository.member.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.example.crewup.repository.querydsl.impl;
+package com.example.crewup.repository.project.querydsl.impl;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ import com.example.crewup.entity.project.Project;
 import com.example.crewup.entity.project.QProject;
 import com.example.crewup.entity.project.QProjectMember;
 import com.example.crewup.entity.project.Status;
-import com.example.crewup.repository.querydsl.ProjectRepositoryCustom;
+import com.example.crewup.repository.project.querydsl.ProjectRepositoryCustom;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQueryFactory;
 

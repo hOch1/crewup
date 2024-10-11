@@ -2,11 +2,13 @@ package com.example.crewup.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.crewup.config.security.PrincipalDetails;
 import com.example.crewup.dto.CustomApiResponse;
 import com.example.crewup.dto.request.auth.SigninRequest;
 import com.example.crewup.dto.request.auth.SignupRequest;
@@ -39,7 +41,8 @@ public class AuthController {
 	public ResponseEntity<CustomApiResponse<Boolean>> signUp(
 		@RequestBody @Valid SignupRequest signupRequest) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(authService.signUp(signupRequest)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(authService.signUp(signupRequest)));
 	}
 
 	@PostMapping("/sign-in")
@@ -52,7 +55,8 @@ public class AuthController {
 	public ResponseEntity<CustomApiResponse<JwtResponse>> signIn(
 		@RequestBody @Valid SigninRequest signinRequest) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(authService.signIn(signinRequest)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(authService.signIn(signinRequest)));
 	}
 
 	@PostMapping("/reissue")
@@ -61,8 +65,9 @@ public class AuthController {
 		@ApiResponse(responseCode = "200", description = "토큰 재발급 성공")
 	})
 	public ResponseEntity<CustomApiResponse<JwtResponse>> reissue(
-		@AuthenticationPrincipal Member member){
+		@AuthenticationPrincipal PrincipalDetails principalDetails){
 
-		return ResponseEntity.ok(CustomApiResponse.success(authService.reissue(member)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(authService.reissue(principalDetails.member())));
 	}
 }

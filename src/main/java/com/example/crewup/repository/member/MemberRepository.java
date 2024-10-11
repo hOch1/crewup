@@ -1,4 +1,4 @@
-package com.example.crewup.repository;
+package com.example.crewup.repository.member;
 
 import java.util.Optional;
 

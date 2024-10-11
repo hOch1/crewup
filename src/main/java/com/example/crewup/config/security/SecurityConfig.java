@@ -6,7 +6,6 @@ import java.util.List;
 import com.example.crewup.config.oauth2.CustomOAuth2UserService;
 import com.example.crewup.config.oauth2.OAuth2SuccessHandler;
 
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

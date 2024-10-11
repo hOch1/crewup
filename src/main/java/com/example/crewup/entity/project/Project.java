@@ -67,7 +67,7 @@ public class Project extends BaseTimeEntity {
 
     /**
      * 리더 설정
-     * @param member leader로 설정하ㄹ member
+     * @param member    leader 설정할 member
      */
     public void setLeader(Member member) {
         ProjectMember projectMember = ProjectMember.builder()
@@ -81,28 +81,39 @@ public class Project extends BaseTimeEntity {
 
     /**
      * 리더 여부 확인
-     * @param member leader 여부를 확인할 member
-     * @return boolean member가 리더일때 true
+     * @param member    leader 여부를 확인할 member
+     * @return boolean  member가 리더일때 true
      */
     public boolean isLeader(Member member) {
         return projectMembers.stream()
-            .anyMatch(pm -> pm.getMember().equals(member) && pm.isLeader());
+            .anyMatch(pm -> pm.getMember().getId().equals(member.getId()) && pm.isLeader());
     }
 
-
-    public void update(UpdateProjectRequest updateRequest) {
-        this.toBuilder()
-            .title(updateRequest.title() != null ? updateRequest.title() : this.title)
-            .description(updateRequest.description() != null ? updateRequest.description() : this.description)
-            .needPosition(updateRequest.needPosition() != null ? updateRequest.needPosition() : this.needPosition)
-            .category(updateRequest.category() != null ? updateRequest.category() : this.category)
-            .build();
+    /**
+     * 프로젝트 수정
+     * @param request   프로젝트 수정 요청
+     */
+    public void update(UpdateProjectRequest request) {
+        if (request.title() != null)
+            this.title = request.title();
+        if (request.description() != null)
+            this.description = request.description();
+        if (request.needPosition() != null)
+            this.needPosition = request.needPosition();
+        if (request.category() != null)
+            this.category = request.category();
     }
 
+    /**
+     * 프로젝트 삭제 (soft delete)
+     */
     public void delete() {
         this.isDeleted = true;
     }
 
+    /**
+     * 프로젝트 완료 상태로 변경
+     */
     public void complete() {
         this.status = Status.COMPLETE;
     }

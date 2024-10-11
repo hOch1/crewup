@@ -51,8 +51,8 @@ public class ProjectController {
 		@RequestBody @Valid CreateProjectRequest createProjectRequest,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(
-			CustomApiResponse.success(projectService.createProject(createProjectRequest, principalDetails.member())));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.createProject(createProjectRequest, principalDetails.member())));
 	}
 
 	@GetMapping("/projects")
@@ -65,7 +65,8 @@ public class ProjectController {
 		@RequestParam("page") int page) {
 
 		Pageable pageable = PageRequest.of(page, 10);
-		return ResponseEntity.ok(CustomApiResponse.success(projectService.getProjectsByFilter(filter, pageable)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.getProjectsByFilter(filter, pageable)));
 	}
 
 	@GetMapping("/project/{projectId}")
@@ -77,19 +78,20 @@ public class ProjectController {
 	public ResponseEntity<CustomApiResponse<ProjectResponse>> getProject(
 		@PathVariable Long projectId) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectService.getProject(projectId)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.getProject(projectId)));
 	}
 
 	@GetMapping("/projects/my")
 	@Operation(summary = "내 프로젝트 목록 조회", description = "내 프로젝트 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "내 프로젝트 목록 조회 성공", content = @Content(
-			schema = @Schema(implementation = CustomApiResponse.class, oneOf = ProjectResponse.class)))
+		@ApiResponse(responseCode = "200", description = "내 프로젝트 목록 조회 성공")
 	})
 	public ResponseEntity<CustomApiResponse<List<ProjectResponse>>> getMyProjects(
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectService.getMyProjects(principalDetails.member())));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.getMyProjects(principalDetails.member())));
 	}
 
 	@PatchMapping("/project/{projectId}")

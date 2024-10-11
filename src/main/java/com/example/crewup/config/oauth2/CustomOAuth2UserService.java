@@ -2,7 +2,7 @@ package com.example.crewup.config.oauth2;
 
 import com.example.crewup.config.security.PrincipalDetails;
 import com.example.crewup.entity.member.Member;
-import com.example.crewup.repository.MemberRepository;
+import com.example.crewup.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

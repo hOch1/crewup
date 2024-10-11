@@ -11,7 +11,7 @@ import com.example.crewup.dto.response.auth.JwtResponse;
 import com.example.crewup.entity.member.Member;
 import com.example.crewup.exception.CustomException;
 import com.example.crewup.exception.ErrorCode;
-import com.example.crewup.repository.MemberRepository;
+import com.example.crewup.repository.member.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +31,7 @@ public class AuthService {
 		if (memberRepository.existsByNickname(signupRequest.nickname()))
 			throw new CustomException(ErrorCode.ALREADY_EXISTS_NICKNAME);
 
-		memberRepository.save(Member.of(signupRequest, passwordEncoder));
+		memberRepository.save(signupRequest.toEntity(passwordEncoder));
 		return true;
 	}
 

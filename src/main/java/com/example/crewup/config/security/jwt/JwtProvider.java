@@ -79,16 +79,11 @@ public class JwtProvider {
 		return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
 	}
 
-	public boolean validateToken(String token) {
-		try {
-			Jwts.parserBuilder()
-				.setSigningKey(signingKey)
-				.build()
-				.parseClaimsJws(token);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+	public void validateToken(String token) {
+		Jwts.parserBuilder()
+			.setSigningKey(signingKey)
+			.build()
+			.parseClaimsJws(token);
 	}
 
 	public String getSubject(String token) {
