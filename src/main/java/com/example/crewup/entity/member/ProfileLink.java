@@ -41,4 +41,7 @@ public class ProfileLink extends BaseTimeEntity {
 	@JoinColumn(name = "profile_id")
 	private Profile profile;
 
+	public void removeProfile() {
+		this.profile = null;
+	}
 }

@@ -45,7 +45,8 @@ public class ProjectMemberController {
 		@RequestBody @Valid ProjectMemberRequest request,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectMemberService.addMemberToProject(projectId, principalDetails.member(), request)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectMemberService.addMemberToProject(projectId, principalDetails.member(), request)));
 	}
 
 	@GetMapping("/members")
@@ -56,7 +57,8 @@ public class ProjectMemberController {
 	public ResponseEntity<CustomApiResponse<List<ProjectMemberResponse>>> getMembersOfProject(
 		@PathVariable Long projectId) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectMemberService.getMembersOfProject(projectId)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectMemberService.getMembersOfProject(projectId)));
 	}
 
 	@PatchMapping("/member/{memberId}")
@@ -70,7 +72,8 @@ public class ProjectMemberController {
 		@RequestBody @Valid UpdateProjectMemberRequest request,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectMemberService.updateMemberOfProject(projectId, memberId, principalDetails.member(), request)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectMemberService.updateMemberOfProject(projectId, memberId, principalDetails.member(), request)));
 	}
 
 	@PatchMapping("/member/{memberId}/leader")
@@ -83,7 +86,8 @@ public class ProjectMemberController {
 		@PathVariable Long memberId,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectMemberService.updateLeaderOfProject(projectId, memberId, principalDetails.member())));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectMemberService.updateLeaderOfProject(projectId, memberId, principalDetails.member())));
 	}
 
 	@DeleteMapping("/member/{memberId}")
@@ -96,6 +100,7 @@ public class ProjectMemberController {
 		@PathVariable Long memberId,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectMemberService.deleteMemberOfProject(projectId, memberId, principalDetails.member())));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectMemberService.deleteMemberOfProject(projectId, memberId, principalDetails.member())));
 	}
 }

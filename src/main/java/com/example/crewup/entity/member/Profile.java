@@ -19,12 +19,14 @@ import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public class Profile extends BaseTimeEntity {
 
 	@Id
@@ -45,11 +47,21 @@ public class Profile extends BaseTimeEntity {
 	@OneToMany(mappedBy = "profile", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProfileLink> profileLinks = new ArrayList<>();
 
-	public void update(UpdateProfileRequest request, List<ProfileLink> profileLink) {
+	public void addLink(ProfileLink profileLink) {
+		profileLinks.add(profileLink);
+	}
+
+	public void clearLinks() {
+		this.profileLinks.forEach(ProfileLink::removeProfile);
+		this.profileLinks.clear();
+	}
+
+	public void update(UpdateProfileRequest updateProfileRequest) {
 		this.toBuilder()
-			.bio(request.bio() != null ? request.bio() : this.bio)
-			.profileImage(request.profileImage() != null ? request.profileImage() : this.profileImage)
-			.profileLinks(profileLink != null ? profileLink : this.profileLinks)
+			.bio(updateProfileRequest.bio() != null ?
+				updateProfileRequest.bio() : this.bio)
+			.profileImage(updateProfileRequest.profileImage() != null ?
+				updateProfileRequest.profileImage() : this.profileImage)
 			.build();
 	}
 }

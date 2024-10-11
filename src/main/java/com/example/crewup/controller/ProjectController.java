@@ -51,8 +51,8 @@ public class ProjectController {
 		@RequestBody @Valid CreateProjectRequest createProjectRequest,
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(
-			CustomApiResponse.success(projectService.createProject(createProjectRequest, principalDetails.member())));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.createProject(createProjectRequest, principalDetails.member())));
 	}
 
 	@GetMapping("/projects")
@@ -65,7 +65,8 @@ public class ProjectController {
 		@RequestParam("page") int page) {
 
 		Pageable pageable = PageRequest.of(page, 10);
-		return ResponseEntity.ok(CustomApiResponse.success(projectService.getProjectsByFilter(filter, pageable)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.getProjectsByFilter(filter, pageable)));
 	}
 
 	@GetMapping("/project/{projectId}")
@@ -77,7 +78,8 @@ public class ProjectController {
 	public ResponseEntity<CustomApiResponse<ProjectResponse>> getProject(
 		@PathVariable Long projectId) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectService.getProject(projectId)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.getProject(projectId)));
 	}
 
 	@GetMapping("/projects/my")
@@ -88,7 +90,8 @@ public class ProjectController {
 	public ResponseEntity<CustomApiResponse<List<ProjectResponse>>> getMyProjects(
 		@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-		return ResponseEntity.ok(CustomApiResponse.success(projectService.getMyProjects(principalDetails.member())));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(projectService.getMyProjects(principalDetails.member())));
 	}
 
 	@PatchMapping("/project/{projectId}")

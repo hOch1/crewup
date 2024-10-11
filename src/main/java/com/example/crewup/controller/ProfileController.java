@@ -33,33 +33,39 @@ public class ProfileController {
 	@Operation(summary = "프로필 수정", description = "프로필을 수정합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "프로필 수정 성공"),
+		@ApiResponse(responseCode = "500", description = "프로필 수정 실패 - 프로필 불러 오지못함"),
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> updateProfile(
 		@AuthenticationPrincipal PrincipalDetails principalDetails,
 		@RequestBody UpdateProfileRequest updateProfileRequest){
 
-		return ResponseEntity.ok(CustomApiResponse.success(profileService.updateProfile(principalDetails.member(), updateProfileRequest)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(profileService.updateProfile(principalDetails.member(), updateProfileRequest)));
 	}
 
 	@GetMapping("/profile/me")
 	@Operation(summary = "내 프로필 조회", description = "내 프로필을 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "내 프로필 조회 성공"),
+		@ApiResponse(responseCode = "500", description = "프로필 조회 실패 - 프로필 불러 오지못함"),
 	})
 	public ResponseEntity<CustomApiResponse<ProfileResponse>> getMyProfile(
 		@AuthenticationPrincipal PrincipalDetails principalDetails){
 
-		return ResponseEntity.ok(CustomApiResponse.success(profileService.getMyProfile(principalDetails.member())));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(profileService.getMyProfile(principalDetails.member())));
 	}
 
 	@GetMapping("/profile/{memberId}")
 	@Operation(summary = "프로필 조회", description = "프로필을 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "프로필 조회 성공"),
+		@ApiResponse(responseCode = "500", description = "프로필 조회 실패 - 프로필 불러 오지못함"),
 	})
 	public ResponseEntity<CustomApiResponse<ProfileResponse>> getProfile(
 		@PathVariable Long memberId){
 
-		return ResponseEntity.ok(CustomApiResponse.success(profileService.getProfile(memberId)));
+		return ResponseEntity.ok(CustomApiResponse
+			.success(profileService.getProfile(memberId)));
 	}
 }

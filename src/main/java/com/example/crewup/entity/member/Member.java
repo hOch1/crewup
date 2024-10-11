@@ -39,5 +39,5 @@ public class Member extends BaseTimeEntity {
     private boolean isDeleted;
 
     @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Profile profile;
+    private Profile profile = new Profile();
 }
