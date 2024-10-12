@@ -1,4 +1,4 @@
-package com.example.crewup.controller;
+package com.example.crewup.controller.project;
 
 import java.util.List;
 
@@ -38,7 +38,8 @@ public class ProjectMemberController {
 	@PostMapping("/member")
 	@Operation(summary = "프로젝트 멤버 추가", description = "프로젝트에 멤버를 추가합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "프로젝트 멤버 추가 성공")
+		@ApiResponse(responseCode = "200", description = "프로젝트 멤버 추가 성공"),
+		@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없습니다.")
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> addMemberToProject(
 		@PathVariable Long projectId,
@@ -64,7 +65,9 @@ public class ProjectMemberController {
 	@PatchMapping("/member/{memberId}")
 	@Operation(summary = "프로젝트 멤버 수정", description = "프로젝트의 멤버를 수정합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "프로젝트 멤버 수정 성공")
+		@ApiResponse(responseCode = "200", description = "프로젝트 멤버 수정 성공"),
+		@ApiResponse(responseCode = "404", description = "프로젝트 멤버를 찾을 수 없습니다."),
+		@ApiResponse(responseCode = "403", description = "접근 권한이 없습니다. (본인이나 리더가 아닐경우)")
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> updateMemberOfProject(
 		@PathVariable Long projectId,
@@ -79,7 +82,9 @@ public class ProjectMemberController {
 	@PatchMapping("/member/{memberId}/leader")
 	@Operation(summary = "프로젝트 리더 변경", description = "프로젝트의 리더를 변경합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "프로젝트 리더 변경 성공")
+		@ApiResponse(responseCode = "200", description = "프로젝트 리더 변경 성공"),
+		@ApiResponse(responseCode = "404", description = "프로젝트 리더를 찾을 수 없습니다."),
+		@ApiResponse(responseCode = "403", description = "접근 권한이 없습니다. (리더가 아닐경우)")
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> updateLeaderOfProject(
 		@PathVariable Long projectId,
@@ -93,7 +98,9 @@ public class ProjectMemberController {
 	@DeleteMapping("/member/{memberId}")
 	@Operation(summary = "프로젝트 멤버 삭제", description = "프로젝트의 멤버를 삭제합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "프로젝트 멤버 삭제 성공")
+		@ApiResponse(responseCode = "200", description = "프로젝트 멤버 삭제 성공"),
+		@ApiResponse(responseCode = "404", description = "프로젝트 멤버를 찾을 수 없습니다."),
+		@ApiResponse(responseCode = "403", description = "접근 권한이 없습니다. (본인이나 리더가 아닐경우)")
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> deleteMemberOfProject(
 		@PathVariable Long projectId,

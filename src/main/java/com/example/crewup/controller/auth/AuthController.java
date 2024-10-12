@@ -1,8 +1,7 @@
-package com.example.crewup.controller;
+package com.example.crewup.controller.auth;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,6 @@ import com.example.crewup.dto.CustomApiResponse;
 import com.example.crewup.dto.request.auth.SigninRequest;
 import com.example.crewup.dto.request.auth.SignupRequest;
 import com.example.crewup.dto.response.auth.JwtResponse;
-import com.example.crewup.entity.member.Member;
 import com.example.crewup.service.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;

@@ -1,4 +1,4 @@
-package com.example.crewup.controller;
+package com.example.crewup.controller.project;
 
 import java.util.List;
 
@@ -26,8 +26,6 @@ import com.example.crewup.dto.response.project.ProjectResponse;
 import com.example.crewup.service.ProjectService;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -73,7 +71,8 @@ public class ProjectController {
 	@Operation(summary = "프로젝트 상세 조회", description = "프로젝트 상세를 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "프로젝트 상세 조회 성공"),
-		@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없습니다.")
+		@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없습니다."),
+		@ApiResponse(responseCode = "410", description = "프로젝트가 삭제되었습니다.")
 	})
 	public ResponseEntity<CustomApiResponse<ProjectResponse>> getProject(
 		@PathVariable Long projectId) {
@@ -97,7 +96,9 @@ public class ProjectController {
 	@PatchMapping("/project/{projectId}")
 	@Operation(summary = "프로젝트 수정", description = "프로젝트를 수정합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "프로젝트 수정 성공")
+		@ApiResponse(responseCode = "200", description = "프로젝트 수정 성공"),
+		@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없습니다."),
+		@ApiResponse(responseCode = "403", description = "프로젝트 리더가 아닙니다.")
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> updateProject(
 		@PathVariable Long projectId,
@@ -112,7 +113,9 @@ public class ProjectController {
 	@PatchMapping("/project/{projectId}/complete")
 	@Operation(summary = "프로젝트 완료", description = "프로젝트를 완료합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "프로젝트 완료 성공")
+		@ApiResponse(responseCode = "200", description = "프로젝트 완료 성공"),
+		@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없습니다."),
+		@ApiResponse(responseCode = "403", description = "프로젝트 리더가 아닙니다.")
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> completeProject(
 		@PathVariable Long projectId,
@@ -125,7 +128,9 @@ public class ProjectController {
 	@DeleteMapping("/project/{projectId}")
 	@Operation(summary = "프로젝트 삭제", description = "프로젝트를 삭제합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공")
+		@ApiResponse(responseCode = "200", description = "프로젝트 삭제 성공"),
+		@ApiResponse(responseCode = "404", description = "프로젝트를 찾을 수 없습니다."),
+		@ApiResponse(responseCode = "403", description = "프로젝트 리더가 아닙니다.")
 	})
 	public ResponseEntity<CustomApiResponse<Boolean>> deleteProject(
 		@PathVariable Long projectId,
